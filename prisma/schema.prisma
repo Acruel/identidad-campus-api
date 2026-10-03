@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AuthProvider {
+  GOOGLE
+  LOCAL
+}
+
+model User {
+  id             String       @id @default(uuid()) @db.Uuid
+  email          String       @unique @db.VarChar(320)
+  displayName    String       @db.VarChar(200)
+  passwordHash   String?      @db.Text
+  googleId       String?      @unique @db.VarChar(255)
+  profilePicture String?      @db.Text
+  authProvider   AuthProvider @default(GOOGLE)
+  createdAt      DateTime     @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime     @updatedAt @db.Timestamptz(3)
+}
